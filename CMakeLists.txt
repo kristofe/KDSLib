@@ -1,0 +1,14 @@
+cmake_minimum_required  (VERSION 2.6)
+project(KDSLib)
+
+SET(SOURCES test.cpp)
+SET(LIBNAME KDSLib)
+
+if(APPLE)
+   FIND_LIBRARY(OPENGL_LIBRARY OpenGL)
+   MARK_AS_ADVANCED(OPENGL_LIBRARY)
+   SET(EXTRA_LIBS ${OPENGL_LIBRARY})
+ENDIF(APPLE)
+
+add_library(${LIBNAME} STATIC ${SOURCES})
+target_link_libraries(${LIBNAME} ${EXTRA_LIBS})
