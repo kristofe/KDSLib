@@ -1,7 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <iostream>
+#include "include/test.h"
 
 void test()
 {
-   printf("Hello from KDSLib\n");
+   std::cout << "Hello from KDSLib"<< std::endl;
+   std::cout.flush();
 }

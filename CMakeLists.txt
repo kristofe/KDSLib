@@ -1,7 +1,16 @@
 cmake_minimum_required  (VERSION 2.6)
 project(KDSLib)
 
-SET(SOURCES test.cpp)
+set(SOURCES
+   test.cpp
+   glutil.cpp
+)
+set(HEADERS
+   include/test.h
+   include/glutil.h
+)
+
+
 SET(LIBNAME KDSLib)
 
 if(APPLE)
@@ -10,5 +19,6 @@ if(APPLE)
    SET(EXTRA_LIBS ${OPENGL_LIBRARY})
 ENDIF(APPLE)
 
-add_library(${LIBNAME} STATIC ${SOURCES})
+include_directories(include)
+add_library(${LIBNAME} STATIC ${SOURCES} ${HEADERS})
 target_link_libraries(${LIBNAME} ${EXTRA_LIBS})
