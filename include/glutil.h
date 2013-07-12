@@ -7,10 +7,12 @@
    #include <OpenGL/gl.h>
 #endif
 #include <string>
+#include <sstream>
 #include <iostream>
 #include <fstream>
+#include <map>
 
-namespace KDSlib
+namespace kdslib
 {
 
    class GLUtil
@@ -29,6 +31,11 @@ namespace KDSlib
      static GLuint loadShaders(const char* vsFileName,
                                const char* fsFileName, const char* gsFileName);
 
+     static std::string getOpenGLInfo();
+     static int checkGLErrors();
+
+   //private:
+   //  std::map<std::string, unsigned int>		mStringToEnumDB;
 
    };
 

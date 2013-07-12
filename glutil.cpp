@@ -1,7 +1,7 @@
 #include "include/glutil.h"
 
 
-using namespace KDSlib;
+using namespace kdslib;
 
 GLUtil::GLUtil()
 {
@@ -102,6 +102,36 @@ std::string GLUtil::getShaderSource(const char *filename)
   return "";
 }
 
+std::string GLUtil::getOpenGLInfo()
+{
+   std::stringstream s;
+   s << "GL_VENDOR: " << (const char*)glGetString(GL_VENDOR) << std::endl;
+
+   s << "GL_RENDERER: " << glGetString(GL_RENDERER) << std::endl;
+
+   s << "GL_VERSION: " << glGetString(GL_VERSION) << std::endl;
+
+   s << "GL_SHADING_LANGUAGE_VERSION: " <<
+        glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
+
+   return s.str();
+}
+
+int GLUtil::checkGLErrors()
+{
+  int errCount = 0;
+  for(GLenum currError = glGetError(); currError != GL_NO_ERROR; currError = glGetError())
+  {
+    //Do something with `currError`.
+    std::cout << "GL ERROR: " << currError << std::endl; std::cout.flush();
+
+    ++errCount;
+  }
+
+  return errCount;
+}
+
+
 /*
 
 void drawQuadVBO() {
@@ -145,6 +175,48 @@ void drawQuadVBO() {
 }
 */
 
+/*
+    // New Stuff
+
+    // Load shader and setup its parameters
+    firstPassShaderProgram = loadShaders();
+    glUseProgram(firstPassShaderProgram);
+
+    positionSlot = glGetAttribLocation(firstPassShaderProgram, "Position");
+    uvSlot = glGetAttribLocation(firstPassShaderProgram, "uv0");
+
+    glEnableVertexAttribArray(positionSlot);
+    glEnableVertexAttribArray(uvSlot);
+
+    projectionUniformSlot = glGetUniformLocation(firstPassShaderProgram, "Projection");
+    modelViewUniformSlot = glGetUniformLocation(firstPassShaderProgram, "Modelview");
+    samplerSlot = glGetUniformLocation(firstPassShaderProgram, "s_texture");
+    imageDimensionsSlot = glGetUniformLocation(firstPassShaderProgram, "u_imageDimensions");
+    redMapSlot = glGetUniformLocation(firstPassShaderProgram, "u_redmap");
+    greenMapSlot = glGetUniformLocation(firstPassShaderProgram, "u_greenmap");
+    blueMapSlot = glGetUniformLocation(firstPassShaderProgram, "u_bluemap");
+    flareColor1Slot = glGetUniformLocation(firstPassShaderProgram, "u_flareColor1");
+    dxdy1Slot = glGetUniformLocation(firstPassShaderProgram, "u_dxdy1");
+    scale1Slot = glGetUniformLocation(firstPassShaderProgram, "u_scale1");
+
+    flareColor2Slot = glGetUniformLocation(firstPassShaderProgram, "u_flareColor2");
+    dxdy2Slot = glGetUniformLocation(firstPassShaderProgram, "u_dxdy2");
+    scale2Slot = glGetUniformLocation(firstPassShaderProgram, "u_scale2");
+
+    blendSlot = glGetUniformLocation(firstPassShaderProgram, "u_blend");
+
+    // Generate VBO
+    glGenBuffers(1,&vboQuad);
+    glBindBuffer(GL_ARRAY_BUFFER, vboQuad);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(flipquad),&flipquad[0].x,GL_STATIC_DRAW);
+
+    glGenBuffers(1, &vboQuadIndices);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboQuadIndices);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices[0], GL_STATIC_DRAW);
+
+    Ortho(projectionMatrix,0, 1, 0, 1, -1, 1);
+    Scaling(modelviewMatrix,1, 1, 1);
+ */
 
 
 /*
