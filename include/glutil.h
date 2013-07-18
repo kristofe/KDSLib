@@ -26,10 +26,11 @@ namespace kdslib
                                 const std::string& fsSource,
                                 const std::string& gsSource);
 
-     static std::string getShaderSource(const char *filename);
+     static std::string getShaderSource(const std::string& filename);
 
-     static GLuint loadShaders(const char* vsFileName,
-                               const char* fsFileName, const char* gsFileName);
+     static GLuint loadShaders(const std::string& vsFileName,
+                               const std::string& fsFileName,
+                               const std::string& gsFileName);
 
      static std::string getOpenGLInfo();
      static int checkGLErrors();

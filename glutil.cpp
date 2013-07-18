@@ -1,5 +1,5 @@
 #include "include/glutil.h"
-
+#include "glm/glm.hpp"
 
 using namespace kdslib;
 
@@ -7,14 +7,14 @@ GLUtil::GLUtil()
 {
 }
 
-GLuint GLUtil::loadShaders(const char* vsFileName,
-                   const char* fsFileName,
-                   const char* gsFileName)
+GLuint GLUtil::loadShaders(const std::string& vsFileName,
+                   const std::string& fsFileName,
+                   const std::string& gsFileName)
 {
 
     std::string vsSource = getShaderSource(vsFileName);
     std::string fsSource = getShaderSource(fsFileName);
-    if(gsFileName != NULL)
+    if(gsFileName.length() == 0)
     {
        std::string gsSource = getShaderSource(gsFileName);
        return buildProgram(vsSource,fsSource, gsSource);
@@ -45,7 +45,7 @@ GLuint GLUtil::buildShader(const std::string& name,
         GLchar messages[256];
         glGetShaderInfoLog(shaderHandle,sizeof(messages), 0, &messages[0]);
         printf("%s\n",messages);
-        exit(1);
+        //exit(1);
     }
     else
     {
@@ -77,7 +77,7 @@ GLuint GLUtil::buildProgram(const std::string& vsSource,
         GLchar messages[256];
         glGetProgramInfoLog(programHandle, sizeof(messages), 0, &messages[0]);
         printf("%s\n", messages);
-        exit(1);
+        //exit(1);
     }
     else
     {
@@ -86,9 +86,9 @@ GLuint GLUtil::buildProgram(const std::string& vsSource,
     return programHandle;
 }
 
-std::string GLUtil::getShaderSource(const char *filename)
+std::string GLUtil::getShaderSource(const std::string& filename)
 {
-  std::ifstream in(filename, std::ios::in | std::ios::binary);
+  std::ifstream in(filename.c_str(), std::ios::in | std::ios::binary);
   if (in)
   {
     std::string contents;
@@ -97,6 +97,7 @@ std::string GLUtil::getShaderSource(const char *filename)
     in.seekg(0, std::ios::beg);
     in.read(&contents[0], contents.size());
     in.close();
+    std::cout << filename << std::endl << contents << std::endl; std::cout.flush();
     return(contents);
   }
   return "";
@@ -106,11 +107,8 @@ std::string GLUtil::getOpenGLInfo()
 {
    std::stringstream s;
    s << "GL_VENDOR: " << (const char*)glGetString(GL_VENDOR) << std::endl;
-
    s << "GL_RENDERER: " << glGetString(GL_RENDERER) << std::endl;
-
    s << "GL_VERSION: " << glGetString(GL_VERSION) << std::endl;
-
    s << "GL_SHADING_LANGUAGE_VERSION: " <<
         glGetString(GL_SHADING_LANGUAGE_VERSION) << std::endl;
 
@@ -120,7 +118,9 @@ std::string GLUtil::getOpenGLInfo()
 int GLUtil::checkGLErrors()
 {
   int errCount = 0;
-  for(GLenum currError = glGetError(); currError != GL_NO_ERROR; currError = glGetError())
+  for(GLenum currError = glGetError();
+      currError != GL_NO_ERROR;
+      currError = glGetError())
   {
     //Do something with `currError`.
     std::cout << "GL ERROR: " << currError << std::endl; std::cout.flush();

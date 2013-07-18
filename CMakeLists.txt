@@ -8,6 +8,7 @@ set(SOURCES
 set(HEADERS
    include/test.h
    include/glutil.h
+   glm/glm.hpp
 )
 
 
@@ -20,5 +21,6 @@ if(APPLE)
 ENDIF(APPLE)
 
 include_directories(include)
+include_directories(glm)
 add_library(${LIBNAME} STATIC ${SOURCES} ${HEADERS})
 target_link_libraries(${LIBNAME} ${EXTRA_LIBS})
