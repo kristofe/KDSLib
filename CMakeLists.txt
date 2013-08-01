@@ -10,6 +10,7 @@ set(HEADERS
    include/test.h
    include/glutil.h
    include/glprogram.h
+   include/glmesh.h
    glm/glm.hpp
 )
 
