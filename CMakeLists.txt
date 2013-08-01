@@ -4,10 +4,12 @@ project(KDSLib)
 set(SOURCES
    test.cpp
    glutil.cpp
+   glprogram.cpp
 )
 set(HEADERS
    include/test.h
    include/glutil.h
+   include/glprogram.h
    glm/glm.hpp
 )
 
