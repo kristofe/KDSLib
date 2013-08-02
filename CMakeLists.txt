@@ -2,16 +2,21 @@ cmake_minimum_required  (VERSION 2.6)
 project(KDSLib)
 
 set(SOURCES
-   test.cpp
-   glutil.cpp
-   glprogram.cpp
+  test.cpp
+  glutil.cpp
+  glprogram.cpp
 )
 set(HEADERS
-   include/test.h
-   include/glutil.h
-   include/glprogram.h
-   include/glmesh.h
-   glm/glm.hpp
+  include/test.h
+  include/utils.h
+  include/glutil.h
+  include/glprogram.h
+  include/glmesh.h
+  include/vector2.h
+  include/vector3.h
+  include/vertex.h
+  include/color.h
+  glm/glm.hpp
 )
 
 
