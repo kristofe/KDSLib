@@ -4,6 +4,8 @@
 #include "glutil.h"
 #include <map>
 
+namespace kdslib{
+
 class GLProgram
 {
 //Methods
@@ -87,4 +89,5 @@ protected:
 
 };
 
+}
 #endif // GLPROGRAM_H

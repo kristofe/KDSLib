@@ -7,6 +7,7 @@
 #include <vector>
 
 
+namespace kdslib{
 
 struct UniformInfo
 {
@@ -119,6 +120,8 @@ void CreateBuffers(GLProgram *program)
    std::cout << "Done setting up triangle" << std::endl; std::cout.flush();
 
    GLUtil::checkGLErrors();
+}
+
 }
 
 #endif // GLMESH_H

@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+namespace kdslib{
+
 struct VertexAttributeInfo
 {
   public:
@@ -82,5 +84,8 @@ public:
   Vector3 uv2;
   Color   color;
 };
+
+
+}
 
 #endif // VERTEX_H

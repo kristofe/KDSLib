@@ -2,6 +2,8 @@
 #define VECTOR3_H
 #include "utils.h"
 
+namespace kdslib{
+
 struct Vector3
 {
 public:
@@ -9,10 +11,12 @@ public:
   Vector3(float px, float py, float pz):x(px),y(py),z(pz){};
 
 private:
-//  DISALLOW_COPY_AND_ASSIGN(Vector3);
+  DISALLOW_COPY_AND_ASSIGN(Vector3);
 
 public:
   float x,y,z;
 };
+
+}
 
 #endif // VECTOR3_H

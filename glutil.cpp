@@ -1,7 +1,7 @@
 #include "include/glutil.h"
 #include "glm/glm.hpp"
 
-using namespace kdslib;
+namespace kdslib{
 
 GLUtil::GLUtil()
 {
@@ -129,6 +129,9 @@ int GLUtil::checkGLErrors()
   }
 
   return errCount;
+}
+
+
 }
 
 

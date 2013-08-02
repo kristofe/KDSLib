@@ -1,9 +1,9 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include "vector3.h"
-#include "vector2.h"
-#include "color.h"
+
+
+namespace kdslib{
 
 // A macro to disallow the copy constructor and operator= functions
 // This should be used in the private: declarations for a class
@@ -12,5 +12,7 @@
   void operator=(const TypeName&)
 
 #define BUFFER_OFFSET(i) ((void*)(i))
+
+}
 
 #endif // UTILS_H

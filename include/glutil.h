@@ -13,6 +13,12 @@
 #include <map>
 #include "utils.h"
 
+//These have to be included after utils.h because of the
+// MACRO DISALLOW_COPY_AND_ASSIGN
+#include "vector3.h"
+#include "vector2.h"
+#include "color.h"
+
 namespace kdslib
 {
 
