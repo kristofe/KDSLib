@@ -6,12 +6,7 @@
 
 class GLProgram
 {
-protected:
-   GLint _programID;
-   std::map<std::string, GLint> _attributeLocations;
-   std::map<std::string, GLint> _uniformLocations;
-
-
+//Methods
 public:
   GLProgram(){};
 
@@ -77,6 +72,18 @@ public:
   {
      return _programID;
   }
+
+
+private:
+  DISALLOW_COPY_AND_ASSIGN(GLProgram);
+
+//Data Members
+
+protected:
+   GLint _programID;
+   std::map<std::string, GLint> _attributeLocations;
+   std::map<std::string, GLint> _uniformLocations;
+
 
 };
 

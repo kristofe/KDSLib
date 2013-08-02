@@ -10,16 +10,19 @@
 template <class T>
 class GLMesh
 {
-protected:
-   GLint _vao;
-   GLint _vbo;
-
-   std::vector<T> verts;
-   std::vector<GLuint> indices;
-
-
+//Methods
 public:
   GLMesh(){};
 
+private:
+  DISALLOW_COPY_AND_ASSIGN(GLMesh);
+
+//Data Members
+protected:
+  GLint _vao;
+  GLint _vbo;
+
+  std::vector<T> verts;
+  std::vector<GLuint> indices;
 };
 #endif // GLMESH_H

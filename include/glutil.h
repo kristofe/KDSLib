@@ -11,6 +11,7 @@
 #include <iostream>
 #include <fstream>
 #include <map>
+#include "utils.h"
 
 namespace kdslib
 {
