@@ -1,0 +1,116 @@
+
+struct ShaderAttribute
+{
+  public:
+    std::string _name; //Corresponds to a name of a data stream
+    int         _type;
+
+};
+
+struct ShaderUniformMetaData
+{
+  public:
+    std::string _name;
+    int         _type;
+    void*       _data;
+};
+
+struct ShaderUniformData
+{
+  public:
+    std::string _name;
+    int         _type;
+    int         _location;
+    void*       _data;
+};
+
+class ShaderProgram
+{
+  /*
+    Attributes:
+
+      Your mesh has a number of data streams. For each stream you can keep the 
+      following info: (name, type, data).
+
+      Upon linking, you can query the GLSL program for active attributes and 
+      form an attribute dictionary for this program. Each element here is just
+      (name, type).
+
+      When you draw a mesh with a specified GLSL program, you go through 
+      programs attribute dictionary and bind the corresponding mesh streams 
+      (or reporting an error in case of inconsistency).
+
+    Uniforms:
+
+      Let the shader parameter dictionary be the set of (name, type, data 
+      link). Typically, you can have the following dictionaries:
+
+        Material (diffuse,specular,shininess,etc) - taken from the material
+
+        Engine (camera, model, lights, timers, etc) - taken from engine 
+        singleton (global)
+
+        Render (custom parameters related to the shader creator: SSAO radius, 
+        blur amount, etc) - provided exclusively by the shader creator class 
+        (render)
+
+      After linking, the GLSL program is given a set of parameter dictionaries
+      in order to populate it's own dictionary with the following element 
+      format: (location, type, data link). This population is done by querying
+      the list of active uniforms and matching (name, type) pair with the one
+      in dictionaries.  
+
+
+      //-----------------------------------------------------------------------
+      so for uniforms the program will be passed in a few dictionaries (from 
+      the material, the engine and from the renderer) and it will populate its
+      own uniform dictionary from them.  It will store (location, type, data 
+      link).
+      //-----------------------------------------------------------------------
+   
+   */
+
+  public:
+    std::map< std::string, ShaderAttribute> _attributes;
+    std::map< std::string, ShaderUniform> _uniforms;
+    int     _programID;
+
+    std::string   _vertexShaderPath;
+    std::string   _vertexShaderSource;
+
+    std::string   _fragmentShaderPath;
+    std::string   _fragmentShaderSource;
+
+    std::string   _geometryShaderPath;
+    std::string   _geometryShaderSource;
+
+};
+
+class MeshDataStream
+{
+  public:
+    std::string _name;
+    int         _type;
+    void*       _dataStream;
+
+};
+
+
+class Mesh
+{
+  public:
+    std::map< std::string, *MeshDataStream>   _dataStreams;
+
+    //Standard data streams - Each will have an entry in the _dataStreams map
+    //However you can add any set of data streams to the map to replace these
+    Vector3*  _positions;
+    Vector3*  _normals;
+    Vector3*  _uv;
+    Vector3*  _uv1;
+    Vector4*  _colors;
+
+
+    //When drawing a mesh make sure that all of the attributes correspond to 
+    //data streams.
+
+};
