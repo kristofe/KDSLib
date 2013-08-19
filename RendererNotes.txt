@@ -66,6 +66,11 @@ class ShaderProgram
       the material, the engine and from the renderer) and it will populate its
       own uniform dictionary from them.  It will store (location, type, data 
       link).
+      
+      
+      the dictionaries are created in code (material - in loading procedure, 
+      engine - in global init, render - in render constructor)
+
       //-----------------------------------------------------------------------
    
    */
