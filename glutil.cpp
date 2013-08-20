@@ -1,7 +1,10 @@
+#include <vector>
+#include <stdio.h>
 #include "include/glutil.h"
 #include "glm/glm.hpp"
 
 namespace kdslib{
+
 
 GLUtil::GLUtil()
 {
@@ -83,8 +86,189 @@ GLuint GLUtil::buildProgram(const std::string& vsSource,
     {
         printf("Successfully created vertexprogram!\n");
     }
+
+    printActiveAttributes(programHandle);
+    printActiveUniforms(programHandle);
     return programHandle;
 }
+
+void GLUtil::printActiveUniforms(GLuint programHandle)
+{
+  GLint uniformCount;
+  glGetProgramiv(programHandle, GL_ACTIVE_UNIFORMS, &uniformCount);
+
+  printf("Active Uniform Count: %d\n", uniformCount);
+  if(uniformCount > 0)
+  {
+      GLint maxUniformNameLength = 0;
+      glGetProgramiv(programHandle, GL_ACTIVE_UNIFORM_MAX_LENGTH,
+                     &maxUniformNameLength);
+      std::vector<GLchar> nameData(maxUniformNameLength);;
+      for(int uniformID = 0; uniformID < uniformCount; ++uniformID)
+      {
+          GLint arraySize = 0;
+          GLenum  type = 0;
+          GLsizei actualLength = 0;
+          glGetActiveUniform(
+                          programHandle,
+                          uniformID,
+                          nameData.size(),
+                          &actualLength,
+                          &arraySize,
+                          &type,
+                          &nameData[0]
+                          );
+         std::string name((char*)&nameData[0], actualLength);
+         printf("Uniform %d name: %s, type:%s\n", uniformID, name.c_str(),
+                        GLUtil::glEnumToString(type).c_str());
+        }
+  }
+}
+
+void GLUtil::getActiveUniforms(
+                               GLuint programHandle,
+                               std::map<std::string, ShaderUniformData>* dict
+                               )
+{
+  GLint uniformCount;
+  glGetProgramiv(programHandle, GL_ACTIVE_UNIFORMS, &uniformCount);
+
+  printf("Active Uniform Count: %d\n", uniformCount);
+  if(uniformCount > 0)
+  {
+      GLint maxUniformNameLength = 0;
+      glGetProgramiv(programHandle, GL_ACTIVE_UNIFORM_MAX_LENGTH,
+                     &maxUniformNameLength);
+      std::vector<GLchar> nameData(maxUniformNameLength);;
+      for(int uniformID = 0; uniformID < uniformCount; ++uniformID)
+      {
+          GLint arraySize = 0;
+          GLenum  type = 0;
+          GLsizei actualLength = 0;
+          glGetActiveUniform(
+                          programHandle,
+                          uniformID,
+                          nameData.size(),
+                          &actualLength,
+                          &arraySize,
+                          &type,
+                          &nameData[0]
+                          );
+          std::string name((char*)&nameData[0], actualLength);
+          ShaderUniformData sud(name, type);
+          std::pair<
+                    std::map< std::string, ShaderUniformData>::iterator,
+                    bool
+                   > res;
+          res = dict->insert(std::make_pair(name, sud));
+          if(res.second == false)
+          {
+           fprintf(
+                 stderr,
+                 "Can't insert key '%s' into uniform dict, it already exists.\n",
+                 name.c_str()
+                 );
+          }
+        }
+  }
+}
+
+void GLUtil::printActiveAttributes(GLuint programHandle)
+{
+  GLint attributeCount;
+  glGetProgramiv(programHandle, GL_ACTIVE_ATTRIBUTES, &attributeCount);
+  printf("Active Attribute Count: %d\n", attributeCount);
+  if(attributeCount > 0)
+  {
+      GLint maxAttributeNameLength = 0;
+      glGetProgramiv(programHandle, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH,
+                     &maxAttributeNameLength);
+      std::vector<GLchar> nameData(maxAttributeNameLength);;
+      for(int attrib = 0; attrib < attributeCount; ++attrib)
+      {
+          GLint arraySize = 0;
+          GLenum type = 0;
+          GLsizei actualLength = 0;
+          glGetActiveAttrib(
+                          programHandle,
+                          attrib,
+                          nameData.size(),
+                          &actualLength,
+                          &arraySize,
+                          &type,
+                          &nameData[0]
+                          );
+         std::string name((char*)&nameData[0], actualLength);
+         printf("Attribute %d name: %s, type:%s\n", attrib, name.c_str(),
+                        GLUtil::glEnumToString(type).c_str());
+        }
+  }
+}
+
+void GLUtil::getActiveAttributes(
+                                  GLuint programHandle,
+                                  std::map<std::string, ShaderAttributeData>* dict
+                                  )
+{
+  GLint attributeCount;
+  glGetProgramiv(programHandle, GL_ACTIVE_ATTRIBUTES, &attributeCount);
+  printf("Active Attribute Count: %d\n", attributeCount);
+  if(attributeCount > 0)
+  {
+      GLint maxAttributeNameLength = 0;
+      glGetProgramiv(programHandle, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH,
+                     &maxAttributeNameLength);
+      std::vector<GLchar> nameData(maxAttributeNameLength);;
+      for(int attrib = 0; attrib < attributeCount; ++attrib)
+      {
+          GLint arraySize = 0;
+          GLenum type = 0;
+          GLsizei actualLength = 0;
+          glGetActiveAttrib(
+                          programHandle,
+                          attrib,
+                          nameData.size(),
+                          &actualLength,
+                          &arraySize,
+                          &type,
+                          &nameData[0]
+                          );
+         std::string name((char*)&nameData[0], actualLength);
+         ShaderAttributeData sd(name, type);
+         std::pair<
+                   std::map< std::string, ShaderAttributeData>::iterator,
+                   bool
+                  > res;
+         res = dict->insert(std::make_pair(name, sd));
+         if(res.second == false)
+         {
+          fprintf(
+                stderr,
+                "Can't insert key '%s' into attribute dict, it already exists.\n",
+                name.c_str()
+                );
+         }
+        }
+  }
+}
+
+//WebGL version
+/*
+    GLint linkSuccess;
+    glGetProgramiv(programHandle, GL_LINK_STATUS, &linkSuccess);
+    if(linkSuccess == GL_FALSE)
+    {
+        printf("Error(s) in program:\n");
+        GLchar messages[256];
+        glGetProgramInfoLog(programHandle, sizeof(messages), 0, &messages[0]);
+        printf("%s\n", messages);
+        //exit(1);
+    }
+    else
+    {
+        printf("Successfully created vertexprogram!\n");
+    }
+*/
 
 std::string GLUtil::getShaderSource(const std::string& filename)
 {
@@ -123,7 +307,8 @@ int GLUtil::checkGLErrors()
       currError = glGetError())
   {
     //Do something with `currError`.
-    std::cout << "GL ERROR: " << currError << std::endl; std::cout.flush();
+    std::cout << "GL ERROR: " << GLUtil::glEnumToString(currError) << std::endl;
+    std::cout.flush();
 
     ++errCount;
   }
@@ -131,9 +316,171 @@ int GLUtil::checkGLErrors()
   return errCount;
 }
 
+std::string GLUtil::glEnumToString(GLenum e)
+{
+  std::string str = "UNKNOWN";
+  switch(e)
+    {
+
+      //Data Types
+      case GL_FLOAT:
+        str =  "GL_FLOAT";
+        break;
+      case GL_FLOAT_VEC2:
+        str =  "GL_FLOAT_VEC2";
+        break;
+      case GL_FLOAT_VEC3:
+        str =  "GL_FLOAT_VEC3";
+        break;
+      case GL_FLOAT_VEC4:
+        str =  "GL_FLOAT_VEC4";
+        break;
+      case GL_FLOAT_MAT2:
+        str =  "GL_FLOAT_MAT2";
+        break;
+      case GL_FLOAT_MAT3:
+        str =  "GL_FLOAT_MAT3";
+        break;
+      case GL_FLOAT_MAT4:
+        str =  "GL_FLOAT_MAT4";
+        break;
+      case GL_FLOAT_MAT2x3:
+        str =  "GL_FLOAT_MAT2x3";
+        break;
+      case GL_FLOAT_MAT2x4:
+        str =  "GL_FLOAT_MAT2x4";
+        break;
+      case GL_FLOAT_MAT3x2:
+        str =  "GL_FLOAT_MAT3x2";
+        break;
+      case GL_FLOAT_MAT3x4:
+        str =  "GL_FLOAT_MAT3x4";
+        break;
+      case GL_FLOAT_MAT4x2:
+        str =  "GL_FLOAT_MAT4x2";
+        break;
+      case GL_FLOAT_MAT4x3:
+        str =  "GL_FLOAT_MAT4x3";
+        break;
+      case GL_INT:
+        str =  "GL_INT";
+        break;
+      case GL_INT_VEC2:
+        str =  "GL_INT_VEC2";
+        break;
+      case GL_INT_VEC3:
+        str =  "GL_INT_VEC3";
+        break;
+      case GL_INT_VEC4:
+        str =  "GL_INT_VEC4";
+        break;
+      case GL_UNSIGNED_INT:
+        str =  "GL_UNSIGNED_INT";
+        break;
+      case GL_UNSIGNED_INT_VEC2:
+        str =  "GL_UNSIGNED_INT_VEC2";
+        break;
+      case GL_UNSIGNED_INT_VEC3:
+        str =  "GL_UNSIGNED_INT_VEC3";
+        break;
+      case GL_UNSIGNED_INT_VEC4:
+        str =  "GL_UNSIGNED_INT_VEC4";
+        break;
+
+      //Error Codes
+      case GL_NO_ERROR:
+        str =  "GL_NO_ERROR";
+        break;
+      case GL_INVALID_ENUM:
+        str =  "GL_INVALID_ENUM";
+        break;
+      case GL_INVALID_VALUE:
+        str =  "GL_INVALID_VALUE";
+        break;
+      case GL_INVALID_OPERATION:
+        str =  "GL_INVALID_OPERATION";
+        break;
+      case GL_INVALID_FRAMEBUFFER_OPERATION:
+        str =  "GL_INVALID_FRAMEBUFFER_OPERATION";
+        break;
+      case GL_OUT_OF_MEMORY:
+        str =  "GL_OUT_OF_MEMORY";
+        break;
+
+
+        /* GL 4 enums?
+      case GL_STACK_UNDERFLOW:
+        str =  "GL_STACK_UNDERFLOW";
+        break;
+      case GL_STACK_OVERFLOW:
+        str =  "GL_STACK_OVERFLOW";
+        break;
+
+      case DOUBLE:
+        str =  "DOUBLE";
+        break;
+      case DOUBLE_VEC2:
+        str =  "DOUBLE_VEC2";
+        break;
+      case DOUBLE_VEC3:
+        str =  "DOUBLE_VEC3";
+        break;
+      case DOUBLE_VEC4:
+        str =  "DOUBLE_VEC4";
+        break;
+      case DOUBLE_MAT2:
+        str =  "DOUBLE_MAT2";
+        break;
+      case DOUBLE_MAT3:
+        str =  "DOUBLE_MAT3";
+        break;
+      case DOUBLE_MAT4:
+        str =  "DOUBLE_MAT4";
+        break;
+      case DOUBLE_MAT2x3:
+        str =  "DOUBLE_MAT2x3";
+        break;
+      case DOUBLE_MAT2x4:
+        str =  "DOUBLE_MAT2x4";
+        break;
+      case DOUBLE_MAT3x2:
+        str =  "DOUBLE_MAT3x2";
+        break;
+      case DOUBLE_MAT3x4:
+        str =  "DOUBLE_MAT3x4";
+        break;
+      case DOUBLE_MAT4x2:
+        str =  "DOUBLE_MAT4x2";
+        break;
+      case DOUBLE_MAT4x3
+        str =  "DOUBLE_MAT4x3";
+        break;
+      */
+    }
+
+    return str;
+}
 
 }
 
+
+/*s
+typedef unsigned int GLenum;
+typedef unsigned char GLboolean;
+typedef unsigned int GLbitfield;
+typedef signed char GLbyte;
+typedef short GLshort;
+typedef int GLint;
+typedef int GLsizei;
+typedef unsigned char GLubyte;
+typedef unsigned short GLushort;
+typedef unsigned int GLuint;
+typedef float GLfloat;
+typedef float GLclampf;
+typedef double GLdouble;
+typedef double GLclampd;
+typedef void GLvoid;
+*/
 
 /*
 

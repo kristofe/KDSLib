@@ -37,7 +37,9 @@ protected:
   GLint _vao;
   GLint _vbo;
 
-  std::vector<Vertex> _verts;
+  std::vector<Vector3> _positions;
+  std::vector<Vector3> _normals;
+  std::vector<Vertex>  _verts;
   std::vector<GLuint> _indices;
   std::vector<VertexAttributeInfo> _attributes;
   std::vector<UniformInfo> _uniforms;
@@ -48,7 +50,7 @@ protected:
 
 int GetVertexListSizeInBytes()
 {
-  return _verts.size()*sizeof(Vertex);
+  return _positions.size()*sizeof(Vertex);
 }
 
 int GetIndexListSizeInBytes()

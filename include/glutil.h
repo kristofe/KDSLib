@@ -21,6 +21,69 @@
 
 namespace kdslib
 {
+  struct ShaderUniformData
+  {
+    public:
+      std::string name;
+      GLenum      type;
+      GLint       location;
+      void*       data;
+
+    public:
+      ShaderUniformData(
+                       std::string pname,
+                       GLenum ptype
+                       ):
+                       name(pname),
+                       type(ptype),
+                       location(-1),
+                       data(NULL)
+      {
+      }
+      ShaderUniformData(const ShaderUniformData& other)
+      {
+        this->name = other.name;
+        this->type = other.type;
+        this->location = other.location;
+        this->data = other.data;
+      }
+
+      void operator=(const ShaderUniformData& other)
+      {
+        this->name = other.name;
+        this->type = other.type;
+        this->location = other.location;
+        this->data = other.data;
+      }
+  };
+
+  struct ShaderAttributeData
+  {
+    public:
+      std::string name; //Corresponds to a name of a data stream
+      GLenum      type;
+
+    public:
+      ShaderAttributeData(
+                       std::string pname,
+                       GLenum ptype
+                       ):
+                       name(pname),
+                       type(ptype)
+      {
+      }
+      ShaderAttributeData(const ShaderAttributeData& other)
+      {
+        this->name = other.name;
+        this->type = other.type;
+      }
+
+      void operator=(const ShaderAttributeData& other)
+      {
+        this->name = other.name;
+        this->type = other.type;
+      };
+};
 
    class GLUtil
    {
@@ -39,6 +102,20 @@ namespace kdslib
                                const std::string& fsFileName,
                                const std::string& gsFileName);
 
+     static void printActiveUniforms(GLuint programHandle);
+     static void getActiveUniforms(
+                            GLuint programHandle,
+                            std::map<std::string, ShaderUniformData>* dict
+                            );
+
+     static void printActiveAttributes(GLuint programHandle);
+     static void getActiveAttributes(
+                            GLuint programHandle,
+                            std::map<std::string, ShaderAttributeData>* dict
+                            );
+
+
+     static std::string glEnumToString(GLenum e);
      static std::string getOpenGLInfo();
      static int checkGLErrors();
 
@@ -46,6 +123,8 @@ namespace kdslib
    //  std::map<std::string, unsigned int>		mStringToEnumDB;
 
    };
+
+
 
 
 }
