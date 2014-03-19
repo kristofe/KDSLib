@@ -15,6 +15,8 @@ GLuint GLUtil::loadShaders(const std::string& vsFileName,
                    const std::string& gsFileName)
 {
 
+    printf("loading shaders %s %s %s\n", vsFileName.c_str(), fsFileName.c_str(),
+                                         gsFileName.c_str());
     std::string vsSource = getShaderSource(vsFileName);
     std::string fsSource = getShaderSource(fsFileName);
     if(gsFileName.length() == 0)
@@ -272,6 +274,7 @@ void GLUtil::getActiveAttributes(
 
 std::string GLUtil::getShaderSource(const std::string& filename)
 {
+  std::cout << "trying to read " << filename << std::endl; std::cout.flush();
   std::ifstream in(filename.c_str(), std::ios::in | std::ios::binary);
   if (in)
   {
